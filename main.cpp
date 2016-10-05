@@ -16,24 +16,26 @@
 char slot[6] = {'x', 'x','x','x','x','x'};
 int money = 100;
 
+/*
+Each printer has an associated array value eg. HandWriter = 0, Printing Press = 3
+Properties of each printer are stored at index of the printer in each different propery's array
+(I feel like there's a better way to do this with classes, but I don't actually know yet)
+*/
+const int NUM_PRINTER_VARIATIONS = 4;
 const char PRODUCER_CHAR[] = {'h', 'i', 'l', 'p'};
-const std::string PRODUCER_NAME[] = {"Hand Writer", "Inkjet Printer", "Laser Printer", "Printing Press"};
+	
+//2D Array of chars, List of strings (which are a list of chars)	
+	const char PRINTER_0[] = "Hand Writer";
+	const char PRINTER_1[] = "Inkjet Printer";
+	const char PRINTER_2[] = "Laser Printer";
+	const char PRINTER_3[] = "Printing Press";
+const char* PRODUCER_NAME[] = {PRINTER_0, PRINTER_1, PRINTER_2, PRINTER_3};
 
-const int HAND_WRITER_REV = 5;
-const char HAND_WRITER_CHAR = 'h';
-const int HAND_WRITER_COST = 75;
+const int PRODUCER_COST[] = {75, 200, 500, 1500};
+const int PRODUCER_REV[] = {5, 15, 40, 100};
 
-const int INKJET_PRINTER_REV = 15;
-const char INKJET_PRINTER_CHAR = 'i';
-const int INKJET_PRINTER_COST = 200;
 
-const int LASER_PRINTER_REV = 40;
-const char LASER_PRINTER_CHAR = 'l';
-const int LASER_PRINTER_COST = 500;
 
-const int PRINTING_PRESS_REV = 100;
-const char PRINTING_PRESS_CHAR = 'p';
-const int PRINTING_PRESS_COST = 1500;
 
 
 void print_layout()
@@ -52,16 +54,15 @@ void print_end_day(int profit, int funds)
 int find_revenue() //Adds up the value of all slots
 {
 	int rev = 0;
-	for (int lcv = 0; lcv <= sizeof(slot); lcv++) //checks for the revenue of each associated slot, adds all together
+	for (int lcv = 0; lcv <= 5; lcv++) //checks for the revenue of each associated slot, adds all together
 	{
-		if (slot[lcv] == '1')
+		for (int level = 0; lcv <= NUM_PRINTER_VARIATIONS; level++)//checks if char stored in slot corresponds to a printer and then adds printer's rev
 		{
-			rev += HAND_WRITER_REV;
-		}
+			if (slot[lcv] == PRODUCER_CHAR[level])
+			{
+				rev += PRODUCER_REV[level];
+			}
 			
-		else if (slot[lcv] == '2')
-		{
-			rev += LASER_PRINTER_REV;
 		}
 	}
 	return rev;
@@ -75,7 +76,11 @@ char do_choice(char choice) //Takes the user's char input and runs an if stateme
 	//Buy thing
 	if (choice == 'b')
 	{
-		printw("Options: \n\t%c : Hand-Writer costs $%i and makes $%i per day", HAND_WRITER_CHAR, HAND_WRITER_COST, HAND_WRITER_REV );
+		printw("Options:");
+		for (int printer_index = 0; printer_index <= NUM_PRINTER_VARIATIONS; printer_index++)
+		{
+			printw( "\n\t%c : %s costs $%i and makes $%i per day", PRODUCER_CHAR[printer_index], PRODUCER_NAME[printer_index], PRODUCER_COST[printer_index], PRODUCER_REV[printer_index]);
+		}
 	}
 	//Next day
 	else if (choice == 'n')
