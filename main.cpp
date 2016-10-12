@@ -72,6 +72,19 @@ int find_revenue() //Adds up the value of all slots
 	return rev;
 }
 
+void buyPrinter()
+{
+	printw("Options:");
+		for (int printer_index = 0; printer_index <= NUM_PRINTER_VARIATIONS; printer_index++)
+		{
+			printw( "\n\t%c : %s costs $%i and makes $%i per day", PRODUCER_CHAR[printer_index], PRODUCER_NAME[printer_index], 
+				PRODUCER_COST[printer_index], PRODUCER_REV[printer_index]);
+		}
+	printw("\nChoice: ");
+	char choice = getch();
+	refresh();
+	printw("You chose %c", choice);
+}
 
 		
 char do_choice(char choice) //Takes the user's char input and runs an if statement dependant on it
@@ -80,11 +93,8 @@ char do_choice(char choice) //Takes the user's char input and runs an if stateme
 	//Buy thing
 	if (choice == 'b')
 	{
-		printw("Options:");
-		for (int printer_index = 0; printer_index <= NUM_PRINTER_VARIATIONS; printer_index++)
-		{
-			printw( "\n\t%c : %s costs $%i and makes $%i per day", PRODUCER_CHAR[printer_index], PRODUCER_NAME[printer_index], PRODUCER_COST[printer_index], PRODUCER_REV[printer_index]);
-		}
+		buyPrinter();
+		
 	}
 	//Next day
 	else if (choice == 'n')
