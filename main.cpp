@@ -40,6 +40,10 @@ const int PRODUCER_REV[] = {5, 15, 40, 100};
 
 void print_layout()
 {
+	/*	Prints the grid layout in form
+		x	x	x
+		x	x	x
+	*/
 	printw("\n\t%c\t%c\t%c\n\t%c\t%c\t%c\n\n", slot[0], slot[1], slot[2], slot[3], slot[4], slot[5]);
 	refresh();
 }
