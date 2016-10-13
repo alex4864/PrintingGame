@@ -23,7 +23,7 @@ int main()
 	getch();
 	clear();
 	
-	
+	int day = 1;
 	int money = 100;
 	bool game_run = true;
 	while (game_run)
@@ -33,16 +33,17 @@ int main()
 		while (user_choice == '\0')
 		{
 			clear();
-			print_layout();
+			print_layout(day, money);
 			printw("Pick what you'd like to do: ");
 			refresh();
 			user_choice = getch();
-			user_choice = do_choice(user_choice);
+			user_choice = do_choice(user_choice, money);
 			getch();
 		}
-		print_end_day(find_revenue(), money);
 		money += find_revenue();
+		print_end_day(find_revenue(), money);
 		getch();
+		day += 1;
 	}
 	printw("Thank you for playing!");
 	endwin();

@@ -4,7 +4,7 @@
 #include"functions.h"
 
 char slot[6] = {'x', 'x','x','x','x','x'};
-
+const int SLOTS = 6;
 
 /*
 Each printer has an associated array value eg. HandWriter = 0, Printing Press = 3
@@ -28,13 +28,13 @@ const int PRODUCER_REV[] = {5, 15, 40, 100};
 
 
 
-void print_layout()
+void print_layout(int day, int money)
 {
 	/*	Prints the grid layout in form
 		x	x	x
 		x	x	x
 	*/
-	printw("\n\t%c\t%c\t%c\n\t%c\t%c\t%c\n\n", slot[0], slot[1], slot[2], slot[3], slot[4], slot[5]);
+	printw("\n\tDay: %i\tMoney: $%i\n\t%c\t%c\t%c\n\t%c\t%c\t%c\n\n", day, money, slot[0], slot[1], slot[2], slot[3], slot[4], slot[5]);
 	refresh();
 }
 
@@ -62,28 +62,69 @@ int find_revenue() //Adds up the value of all slots
 	return rev;
 }
 
-void buyPrinter()
+void buyPrinter(int& money)
 {
-	printw("Options:");
-		for (int printer_index = 0; printer_index <= NUM_PRINTER_VARIATIONS; printer_index++)
+	printw("Options:"); //Prints options
+	for (int printer_index = 0; printer_index < NUM_PRINTER_VARIATIONS; printer_index++)
 		{
 			printw( "\n\t%c : %s costs $%i and makes $%i per day", PRODUCER_CHAR[printer_index], PRODUCER_NAME[printer_index], 
 				PRODUCER_COST[printer_index], PRODUCER_REV[printer_index]);
 		}
 	printw("\nChoice: ");
 	char choice = getch();
-	refresh();
-	printw("You chose %c", choice);
+	int choice_index_val = -1;
+	for (int printer_index = 0; printer_index <= NUM_PRINTER_VARIATIONS; printer_index++)	//Sets the choice_index_val to corresponding val associated with char
+	{
+		if (choice == PRODUCER_CHAR[printer_index])
+		{
+			choice_index_val = printer_index;
+		}
+	}
+	if (choice_index_val == -1) // if they give invalid input, returns out of FN without carrying on (add a pls try again later)
+	{
+		return;
+	}
+	printw("\nYou chose %c, it's the %s which cost %i\nWould you like to purchase this?(y/n): ",
+		choice, PRODUCER_NAME[choice_index_val], PRODUCER_COST[choice_index_val]);
+	char confirm = '\0';
+	confirm = getch();
+	if (confirm == 'y')
+	{
+		if (money >= PRODUCER_COST[choice_index_val])
+		{
+			printw("\nWhich slot will it occupy?: ");
+			int slot_choice = -1;
+			slot_choice = getch();
+			slot_choice = slot_choice - 48;
+			if (slot_choice <= SLOTS && slot_choice >= 0)
+			{
+				slot[slot_choice] = choice;
+				money -= PRODUCER_COST[choice_index_val];
+			}
+			else
+			{
+				printw("Invalid slot number");
+			}
+		}
+		else
+		{
+			printw("Not enough money");
+		}
+	}
+	else
+	{
+		printw("Aborting purchase!");
+	}	
 }
 
 		
-char do_choice(char choice) //Takes the user's char input and runs an if statement dependant on it
+char do_choice(char choice, int& money) //Takes the user's char input and runs an if statement dependant on it
 {	
 	printw("\n");
 	//Buy thing
 	if (choice == 'b')
 	{
-		buyPrinter();
+		buyPrinter(money);
 		
 	}
 	//Next day
