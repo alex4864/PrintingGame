@@ -3,7 +3,7 @@
 #include<ncurses.h>
 #include"functions.h"
 
-char slot[6] = {'x', 'x','x','x','x','x'};
+char slot[6] = {'x','x','x','x','x','x'};
 const int SLOTS = 6;
 
 /*
@@ -28,13 +28,13 @@ const int PRODUCER_REV[] = {5, 15, 40, 100};
 
 
 
-void print_layout(int day, int money)
+void print_layout(int day, int money, int power_up_days)
 {
 	/*	Prints the grid layout in form
 		x	x	x
 		x	x	x
 	*/
-	printw("\n\tDay: %i\tMoney: $%i\n\t%c\t%c\t%c\n\t%c\t%c\t%c\n\n", day, money, slot[0], slot[1], slot[2], slot[3], slot[4], slot[5]);
+	printw("\n\tDay: %i\tMoney: $%i\tPower Up Left: %i\n\n\t%c\t\t%c\t\t%c\n\n\t%c\t\t%c\t\t%c\n\nb: Buy Printers\tn: Next Day\t\n\n", day, money, power_up_days, slot[0], slot[1], slot[2], slot[3], slot[4], slot[5]);
 	refresh();
 }
 
@@ -103,21 +103,44 @@ void buyPrinter(int& money)
 			}
 			else
 			{
-				printw("Invalid slot number");
+				printw("\nInvalid slot number");
 			}
 		}
 		else
 		{
-			printw("Not enough money");
+			printw("\nNot enough money");
 		}
 	}
 	else
 	{
-		printw("Aborting purchase!");
+		printw("\nAborting purchase!");
 	}	
 }
 
+void buyPowerUp(int& money, int power_up_days)
+{
+	if (power_up_days != 0)
+	{
+		printw("Sorry! Wait for current power up to end!")
+		return;
+	}
+	printw("Would you like to purchase a Power-Up for $100?(y/n)");
+	char confirm = '\0';
+	confirm = getch();
+	if (confirm == 'y')
+	{
+		money -= 100;
 		
+	}	
+}
+
+void powerUpCountdown(int& days)
+{
+	if (days > 0)
+	{
+		days -= 1;
+	}
+}		
 char do_choice(char choice, int& money) //Takes the user's char input and runs an if statement dependant on it
 {	
 	printw("\n");

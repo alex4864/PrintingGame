@@ -6,8 +6,6 @@
 /*		TO-DO LIST:
 	Add all type of printers
 	
-	Create buy function to change slot value (need to specify a slot, which printer)
-	
 	Create sell function to set slot = x and return portion of cost
 	
 	Implement Rent function
@@ -25,6 +23,7 @@ int main()
 	
 	int day = 1;
 	int money = 100;
+	int power_up_left = 0;
 	bool game_run = true;
 	while (game_run)
 	{
@@ -33,7 +32,7 @@ int main()
 		while (user_choice == '\0')
 		{
 			clear();
-			print_layout(day, money);
+			print_layout(day, money, power_up_left);
 			printw("Pick what you'd like to do: ");
 			refresh();
 			user_choice = getch();
@@ -43,6 +42,7 @@ int main()
 		money += find_revenue();
 		print_end_day(find_revenue(), money);
 		getch();
+		powerUpCountdown(power_up_left);
 		day += 1;
 	}
 	printw("Thank you for playing!");
