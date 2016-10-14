@@ -24,6 +24,7 @@ int main()
 	int day = 1;
 	int money = 100;
 	int power_up_left = 0;
+	bool PowerUp[] = {false, false, false, false};
 	bool game_run = true;
 	while (game_run)
 	{
@@ -36,7 +37,7 @@ int main()
 			printw("Pick what you'd like to do: ");
 			refresh();
 			user_choice = getch();
-			user_choice = do_choice(user_choice, money);
+			user_choice = do_choice(user_choice, money, PowerUp);
 			getch();
 		}
 		money += find_revenue();

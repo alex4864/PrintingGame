@@ -2,6 +2,7 @@
 #include<string>
 #include<ncurses.h>
 #include"functions.h"
+#include<time.h>
 
 char slot[6] = {'x','x','x','x','x','x'};
 const int SLOTS = 6;
@@ -117,21 +118,51 @@ void buyPrinter(int& money)
 	}	
 }
 
-void buyPowerUp(int& money, int power_up_days)
+void buyPowerUp(int& money, int power_up_days, bool PowerUp)
 {
-	if (power_up_days != 0)
+	srand(time(NULL));
+	if (power_up_days != 0)	//Makes sure that the user isn't currently using a power up
 	{
-		printw("Sorry! Wait for current power up to end!")
+		printw("Sorry! Wait for current power up to end!");
 		return;
 	}
-	printw("Would you like to purchase a Power-Up for $100?(y/n)");
+	printw("Would you like to purchase a Power-Up for $100?(y/n)"); //Confirms user choice
 	char confirm = '\0';
 	confirm = getch();
 	if (confirm == 'y')
 	{
 		money -= 100;
-		
+		int chance = rand() % 100;  //Gets a random num on [0,99] used to pick powerup
+		if(chance == 0)
+		{
+			PowerUp[0] = true;
+			printw("You got PowerUp 1");
+		}
+		else if(chance <=5)
+		{
+			PowerUp[1] = true;
+			printw("You got PowerUp 2");
+		}
+		else if(chance <= 15)
+		{
+			PowerUp[2] = true;
+			printw("You got PowerUp 3");
+		}
+		else if(chance <= 50)
+		{
+			PowerUp[3] = true;
+			printw("You got PowerUp 4");
+		}
+		else
+		{
+			printw("You got nothing!!!");
+		}
+		return;
 	}	
+	else
+	{
+		return;
+	}
 }
 
 void powerUpCountdown(int& days)
@@ -141,7 +172,7 @@ void powerUpCountdown(int& days)
 		days -= 1;
 	}
 }		
-char do_choice(char choice, int& money) //Takes the user's char input and runs an if statement dependant on it
+char do_choice(char choice, int& money, bool PowerUp) //Takes the user's char input and runs an if statement dependant on it
 {	
 	printw("\n");
 	//Buy thing
@@ -155,6 +186,12 @@ char do_choice(char choice, int& money) //Takes the user's char input and runs a
 	{
 		printw("you chose n");
 		return 'n'; // breaks while loop in main, leading to end of user choices
+	}
+	
+	//Buy Powerups
+	else if (choice == 'p')
+	{
+		buyPowerUp(money, power_up_days, PowerUp);
 	}
 	
 	//Sell printer
